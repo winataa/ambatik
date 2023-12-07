@@ -161,48 +161,81 @@ const getAllProductInCart = async(req, res) => {
 const addProductToCart = async(req, res) => {
 
     try{
-        const selectedProduct = await product.findOne({where:{id: req.body.productId}});
-        const selectedCart = await cart.findOne({where: {productId: selectedProduct.id}});
+        const selectedProduct = await product.findOne(
+            {
+                where:
+                {
+                    id: req.body.productId
+                }
+            }
+        );
+        const selectedCart = await cart.findOne(
+            {
+                where: 
+                {
+                    productId: selectedProduct.id,
+                    userId: req.body.userId
+                }
+            }
+        );
         const command = req.body.command;
 
-        if(command == "add"){
-            if(selectedCart){
-            selectedCart.increment('qty_product');
-            res.status(200).json({
+        if(!selectedCart || !selectedProduct){
+            res.status(404).json({
                 error: false,
                 firstTimeAdded: false,
-                message: 'Product already in cart, increment qty product',
+                message: 'Cart or product not found',
             })
-            }else{
-                await cart.create({
-                    qty_product: 1,
-                    userId: req.body.userId,
-                    productId: req.body.productId,
-                })
+        }
+        else{
+            if(command == "add"){
+                if(selectedCart){
+                
+                selectedCart.increment('qty_product');
                 res.status(200).json({
                     error: false,
-                    firstTimeAdded: true,
-                    message: 'Added product for the first time into cart',
+                    firstTimeAdded: false,
+                    message: 'Product already in cart, increment qty product',
+
                 })
+                }else{
+                    await cart.create({
+                        qty_product: 1,
+                        userId: req.body.userId,
+                        productId: req.body.productId,
+                    })
+                    res.status(200).json({
+                        error: false,
+                        firstTimeAdded: true,
+                        message: 'Added product for the first time into cart',
+                    })
+                }
+            }
+            else if(command == "reduce"){
+                if(selectedCart.qty_product > 1){
+                    selectedCart.decrement('qty_product');
+                    res.status(200).json({
+                        error: false,
+                        reduce: true,
+                        message: 'Product already in cart, decrement qty product',
+                    })
+                }
+                else if(selectedCart.qty_product == 1){
+                    await cart.destroy({
+                        where: {
+                            productId: req.body.productId,
+                            userId: req.body.userId
+                        },
+                    });
+                    res.status(200).json({
+                        error: false,
+                        reduce: true,
+                        message: 'Delete one product in cart',
+                    })
+                }
             }
         }
-        else if(command == "reduce"){
-            if(selectedCart.qty_product >= 1){
-                selectedCart.decrement('qty_product');
-                res.status(200).json({
-                    error: false,
-                    reduce: true,
-                    message: 'Product already in cart, decrement qty product',
-                })
-            }
-            else if(selectedCart.qty_product == 0){
-                res.status(200).json({
-                    error: false,
-                    reduce: false,
-                    message: 'Qty product in cart cant be negative',
-                })
-            }
-        }
+        
     }
     catch(error){
         res.status(500).json({
