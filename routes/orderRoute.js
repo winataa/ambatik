@@ -9,11 +9,11 @@ const route = express.Router();
 route.get('/:userid', OrderController.getAllOrder);
 
 //ADD ORDER
-route.post('/checkout', OrderController.checkout );
+route.post('/checkout', OrderController.checkout);
 
-//LIKE / UNLIKE ARTICLE
+// LIKE / UNLIKE ARTICLE
 // route.post('/like', ArticleController.likeArticle);
-
+//
 // //GET SELECTED ARTICLE
 // route.get('/details/:id/:userid', ArticleController.getSelectedArticle);
 
