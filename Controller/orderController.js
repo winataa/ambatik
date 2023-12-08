@@ -8,25 +8,6 @@ const sequelize = require('sequelize');
 
 const getAllOrder = async(req, res) => {
     try{
-        // const allOrder = await order.findAll({
-        //     attributes: [
-        //         [sequelize.col('orders.total_item'), 'total_item'],
-        //         [sequelize.col('orders.total_price'), 'total_price'],
-        //         [sequelize.col('products.name'), 'name'],
-        //         [sequelize.col('orders.createdAt'), 'createdAt'],
-        //         [sequelize.col('products.url_product'), 'url_product'],
-        //     ],
-        //     include: {
-        //         model: product,
-        //         attributes: [],
-        //     },
-        //     where: {
-        //         userId: req.params.userid,
-        //     },
-        //     group: ['orders.createdAt'],
-        //     order: [[sequelize.col('orders.createdAt'), 'DESC']],
-        // });
-
         const allOrder = await order.findAll({
             // subQuery: false,
             attributes: [
@@ -37,7 +18,7 @@ const getAllOrder = async(req, res) => {
                 // [sequelize.col('order.createdAt'), 'createdAt'],
                 // 'product.url_product',
                 [
-                    sequelize.literal('(SELECT COUNT(*) FROM detail_orders WHERE detail_orders.orderId = order.id) - 1'),
+                    sequelize.literal('(SELECT COUNT(id) FROM detail_orders WHERE detail_orders.orderId = order.id) - 1'),
                     'other_item',
                 ],
             ],
@@ -58,7 +39,7 @@ const getAllOrder = async(req, res) => {
                 },
             ],
             where: { userId: req.params.userid },
-            group: ['order.createdAt'],
+            // group: ['order.createdAt'],
             order: [[sequelize.col('order.createdAt'), 'DESC']],
         })
         if(allOrder.length > 0){
