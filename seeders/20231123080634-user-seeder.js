@@ -15,7 +15,7 @@ module.exports = {
     */
     const hashedPassword = await bcrypt.hash('john123', 10);
 
-    return queryInterface.bulkInsert('Users', [
+    return queryInterface.bulkInsert('users', [
       {
         name: 'john',
         address: 'Jakarta',
@@ -45,6 +45,6 @@ module.exports = {
       // await queryInterface.bulkDelete('likes', null, {});
 
      // Then remove records from the parent table (e.g., users)
-      await queryInterface.bulkDelete('Users', condition, {});
+      await queryInterface.bulkDelete('users', condition, {});
   }
 };

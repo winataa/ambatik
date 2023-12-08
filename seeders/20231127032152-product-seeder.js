@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    await queryInterface.bulkInsert('Products', [
+    await queryInterface.bulkInsert('products', [
       {
         name: 'Kemeja Batik Pria Biru',
         url_product: 'https://www.static-src.com/wcsstore/Indraprastha/images/catalog/full//101/MTA-6548951/batik_sri_batik_sri_kemeja_batik_pria_full01_dyq6v1vz.jpg',
@@ -91,6 +91,6 @@ module.exports = {
      * Example:
      * await queryInterface.bulkDelete('People', null, {});
      */
-    await queryInterface.bulkDelete('Products', null, {});
+    await queryInterface.bulkDelete('products', null, {});
   }
 };

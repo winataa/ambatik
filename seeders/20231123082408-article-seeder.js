@@ -12,7 +12,7 @@ module.exports = {
      *   isBetaMember: false
      * }], {});
     */
-    return queryInterface.bulkInsert('Articles', [
+    return queryInterface.bulkInsert('articles', [
       {
         title: 'Yuk, Rayakan Hari Batik Nasional dalam Rangkaian Acara Keren GANTARI!',
         url_banner: 'https://www.indonesia.travel/content/dam/indtravelrevamp/id-id/ide-liburan/yuk-rayakan-hari-batik-nasional-dalam-rangkaian-acara-keren-gantari/gantari-artikel-1.jpg',
@@ -47,6 +47,6 @@ module.exports = {
       // await queryInterface.bulkDelete('likes', null, {});
 
      // Then remove records from the parent table (e.g., users)
-      await queryInterface.bulkDelete('Articles', condition, {});
+      await queryInterface.bulkDelete('articles', condition, {});
   }
 };
