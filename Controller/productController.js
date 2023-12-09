@@ -179,60 +179,50 @@ const addProductToCart = async(req, res) => {
             }
         );
         const command = req.body.command;
-
-        if(!selectedCart || !selectedProduct){
-            res.status(404).json({
+        if(command == "add"){
+            if(selectedCart){
+            
+            selectedCart.increment('qty_product');
+            res.status(200).json({
                 error: false,
                 firstTimeAdded: false,
-                message: 'Cart or product not found',
+                message: 'Product already in cart, increment qty product',
+
             })
-        }
-        else{
-            if(command == "add"){
-                if(selectedCart){
-                
-                selectedCart.increment('qty_product');
+            }else{
+                await cart.create({
+                    qty_product: 1,
+                    userId: req.body.userId,
+                    productId: req.body.productId,
+                })
                 res.status(200).json({
                     error: false,
-                    firstTimeAdded: false,
-                    message: 'Product already in cart, increment qty product',
-
+                    firstTimeAdded: true,
+                    message: 'Added product for the first time into cart',
                 })
-                }else{
-                    await cart.create({
-                        qty_product: 1,
-                        userId: req.body.userId,
-                        productId: req.body.productId,
-                    })
-                    res.status(200).json({
-                        error: false,
-                        firstTimeAdded: true,
-                        message: 'Added product for the first time into cart',
-                    })
-                }
             }
-            else if(command == "reduce"){
-                if(selectedCart.qty_product > 1){
-                    selectedCart.decrement('qty_product');
-                    res.status(200).json({
-                        error: false,
-                        reduce: true,
-                        message: 'Product already in cart, decrement qty product',
-                    })
-                }
-                else if(selectedCart.qty_product == 1){
-                    await cart.destroy({
-                        where: {
-                            productId: req.body.productId,
-                            userId: req.body.userId
-                        },
-                    });
-                    res.status(200).json({
-                        error: false,
-                        reduce: true,
-                        message: 'Delete one product in cart',
-                    })
-                }
+        }
+        else if(command == "reduce"){
+            if(selectedCart.qty_product > 1){
+                selectedCart.decrement('qty_product');
+                res.status(200).json({
+                    error: false,
+                    reduce: true,
+                    message: 'Product already in cart, decrement qty product',
+                })
+            }
+            else if(selectedCart.qty_product == 1){
+                await cart.destroy({
+                    where: {
+                        productId: req.body.productId,
+                        userId: req.body.userId
+                    },
+                });
+                res.status(200).json({
+                    error: false,
+                    reduce: true,
+                    message: 'Delete one product in cart',
+                })
             }
         }
         

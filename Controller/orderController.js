@@ -39,7 +39,7 @@ const getAllOrder = async(req, res) => {
                 },
             ],
             where: { userId: req.params.userid },
-            // group: ['order.createdAt'],
+            group: ['order.createdAt'],
             order: [[sequelize.col('order.createdAt'), 'DESC']],
         })
         if(allOrder.length > 0){
