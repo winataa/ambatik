@@ -4,44 +4,81 @@ const like = models.like;
 const user = models.user;
 const product = models.product;
 const detailOrder = models.detail_order;
-const sequelize = require('sequelize');
+const sequelize = models.sequelize;
+
 
 const getAllOrder = async(req, res) => {
     try{
-        const allOrder = await order.findAll({
-            // subQuery: false,
-            attributes: [
-                'total_item',
-                'total_price',
-                // 'product.name',
-                'createdAt',
-                // [sequelize.col('order.createdAt'), 'createdAt'],
-                // 'product.url_product',
-                [
-                    sequelize.literal('(SELECT COUNT(id) FROM detail_orders WHERE detail_orders.orderId = order.id) - 1'),
-                    'other_item',
-                ],
-            ],
-            include: [
-                {
-                    model: detailOrder,
-                    attributes: ['productId'],
-                    // where: { orderId: sequelize.col('order.id') },
-                    include: [
-                        {
-                            model: product,
-                            attributes: [
-                                'name', 
-                                'url_product',    
-                            ],
-                        },
-                    ],
-                },
-            ],
-            where: { userId: req.params.userid },
-            group: ['order.createdAt'],
-            order: [[sequelize.col('order.createdAt'), 'DESC']],
-        })
+        // const allOrder = await order.findAll({
+        //     // subQuery: false,
+        //     attributes: [
+        //         'total_item',
+        //         'total_price',
+        //         // 'product.name',
+        //         'createdAt',
+        //         // [sequelize.col('order.createdAt'), 'createdAt'],
+        //         // 'product.url_product',
+        //         [
+        //             sequelize.literal('(SELECT COUNT(id) FROM detail_orders WHERE detail_orders.orderId = order.id) - 1'),
+        //             'other_item',
+        //         ],
+        //     ],
+        //     include: [
+        //         {
+        //             model: detailOrder,
+        //             attributes: ['productId'],
+        //             // where: { orderId: sequelize.col('order.id') },
+        //             include: [
+        //                 {
+        //                     model: product,
+        //                     attributes: [
+        //                         'name', 
+        //                         'url_product',    
+        //                     ],
+        //                 },
+        //             ],
+        //         },
+        //     ],
+        //     where: { userId: req.params.userid },
+        //     group: ['order.createdAt'],
+        //     order: [[sequelize.col('order.createdAt'), 'DESC']],
+        // })
+
+        const allOrder = await sequelize.query(
+            `
+              SELECT
+                \`order\`.\`id\`,
+                \`order\`.\`total_item\`,
+                \`order\`.\`total_price\`,
+                \`order\`.\`createdAt\`,
+                COUNT(\`detail_orders\`.\`id\`) - 1 AS \`other_item\`,
+                MAX(\`detail_orders->product\`.\`id\`) AS \`product.id\`,
+                MAX(\`detail_orders->product\`.\`name\`) AS \`product.name\`,
+                MAX(\`detail_orders->product\`.\`url_product\`) AS \`product.url_product\`
+            FROM
+                \`orders\` AS \`order\`
+            LEFT OUTER JOIN
+                \`detail_orders\` AS \`detail_orders\`
+            ON
+                \`order\`.\`id\` = \`detail_orders\`.\`orderId\`
+            LEFT OUTER JOIN
+                \`products\` AS \`detail_orders->product\`
+            ON
+                \`detail_orders\`.\`productId\` = \`detail_orders->product\`.\`id\`
+            WHERE
+                \`order\`.\`userId\` = :userId
+            GROUP BY
+                \`order\`.\`id\`, \`order\`.\`total_item\`, \`order\`.\`total_price\`, \`order\`.\`createdAt\`
+            ORDER BY
+                \`order\`.\`createdAt\` DESC;
+            `,
+            {
+                replacements: { userId: req.params.userid },
+                type: sequelize.QueryTypes.SELECT,
+            }
+        )
+
+        
         if(allOrder.length > 0){
             res.status(200).json({
                 error: false,

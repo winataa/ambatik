@@ -181,7 +181,6 @@ const addProductToCart = async(req, res) => {
         const command = req.body.command;
         if(command == "add"){
             if(selectedCart){
-            
             selectedCart.increment('qty_product');
             res.status(200).json({
                 error: false,
