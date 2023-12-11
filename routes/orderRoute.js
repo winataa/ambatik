@@ -8,16 +8,11 @@ const route = express.Router();
 //GET ALL ORDER
 route.get('/:userid', OrderController.getAllOrder);
 
+//GET DETAIL ORDER
+route.get('/details/:id/:userid', OrderController.getDetailOrder);
+
 //ADD ORDER
 route.post('/checkout', OrderController.checkout);
 
-// LIKE / UNLIKE ARTICLE
-// route.post('/like', ArticleController.likeArticle);
-//
-// //GET SELECTED ARTICLE
-// route.get('/details/:id/:userid', ArticleController.getSelectedArticle);
-
-// //GET ALL LIKED ARTICLE
-// route.get('/like/:id', ArticleController.getAllLikedArticle);
 
 module.exports = route;

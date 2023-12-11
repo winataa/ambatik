@@ -46,7 +46,7 @@ const getAllOrder = async(req, res) => {
 
         const allOrder = await sequelize.query(
             `
-              SELECT
+                SELECT
                 \`order\`.\`id\`,
                 \`order\`.\`total_item\`,
                 \`order\`.\`total_price\`,
@@ -159,7 +159,36 @@ const checkout = async(req, res) => {
     
 }
 
+const getDetailOrder = async(req, res) => {
+    const selectedOrder = await order.findAll({
+        attributes: ['id', 'total_item', 'total_price'],
+        where: {
+            id: req.params.id,
+            userId: req.params.userid,
+        },
+        include: [
+            {
+            model: product,
+            attributes: ['name', 'url_product', 'price', 'store_name'],
+            through: { attributes: ['each_qty'] }, // Include the through table for many-to-many relationships
+            },
+        ],
+    })
+
+    var detailOrder = null;
+    if(selectedOrder){
+        detailOrder = selectedOrder;
+    }
+
+    res.status(200).json({
+        error: false,
+        message: 'Get detail detail order',
+        data: detailOrder,
+    })
+}
+
 module.exports = {
     getAllOrder,
-    checkout
+    checkout,
+    getDetailOrder
 }
