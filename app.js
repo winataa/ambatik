@@ -21,15 +21,10 @@ const userRoute = require('./routes/userRoute.js');
 const articleRoute = require('./routes/articleRoute.js');
 const productRoute = require('./routes/productRoute.js');
 const orderRoute = require('./routes/orderRoute.js');
+const quizRoute = require('./routes/quizRoute.js');
 
 //Import User Controller
 const UserController = require('./Controller/userController.js')
-
-
-//Model Import
-// const { User } = require('./models/user.js');
-
-
 
 //User Route
 app.use('/users', userRoute);
@@ -43,6 +38,9 @@ app.use('/product', authenticateToken, productRoute);
 
 //Order Route
 app.use('/order', authenticateToken, orderRoute);
+
+//Quiz Route
+app.use('/quiz', authenticateToken, quizRoute);
 
 //Error
 app.use((err, req, res, next) => {

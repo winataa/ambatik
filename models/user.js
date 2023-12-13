@@ -21,6 +21,9 @@ module.exports = (sequelize, DataTypes) => {
       user.hasMany(models.like, { foreignKey: 'userId' });
       user.hasMany(models.cart, { foreignKey: 'userId' });
       user.hasMany(models.order, { foreignKey: 'userId'});
+      user.hasMany(models.quiz_history, { foreignKey: 'userId'});
+      user.belongsToMany(models.quiz, { through: models.quiz_history });
+
     }
     
     static async isUsernameRegistered(username) {

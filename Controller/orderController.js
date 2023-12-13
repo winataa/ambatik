@@ -6,7 +6,6 @@ const product = models.product;
 const detailOrder = models.detail_order;
 const sequelize = models.sequelize;
 
-
 const getAllOrder = async(req, res) => {
     try{
         // const allOrder = await order.findAll({
@@ -77,7 +76,6 @@ const getAllOrder = async(req, res) => {
                 type: sequelize.QueryTypes.SELECT,
             }
         )
-
         
         if(allOrder.length > 0){
             res.status(200).json({
