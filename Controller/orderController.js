@@ -144,7 +144,11 @@ const checkout = async(req, res) => {
         res.status(201).json({
             error: false,
             checkout: true,
-            message: 'Successfully checkout product'
+            message: 'Successfully checkout product',
+            //tester
+            // allProductId: productIds,
+            // allEachPrices: eachPrices,
+            // allEachQty: eachQtys,
             // latest: latestOrderId
         })
     }

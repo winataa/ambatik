@@ -22,6 +22,7 @@ const articleRoute = require('./routes/articleRoute.js');
 const productRoute = require('./routes/productRoute.js');
 const orderRoute = require('./routes/orderRoute.js');
 const quizRoute = require('./routes/quizRoute.js');
+const batikRoute = require('./routes/batikRoute.js');
 
 //Import User Controller
 const UserController = require('./Controller/userController.js')
@@ -41,6 +42,9 @@ app.use('/order', authenticateToken, orderRoute);
 
 //Quiz Route
 app.use('/quiz', authenticateToken, quizRoute);
+
+//Batik Route
+app.use('/batik', authenticateToken, batikRoute);
 
 //Error
 app.use((err, req, res, next) => {
