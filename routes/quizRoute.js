@@ -13,7 +13,7 @@ route.get('/:quizId/question/:questionid', QuizController.getQuestion);
 //SUBMIT ANSWER
 route.post('/submit', QuizController.submitQuiz);
 
-
-// route.get('/:quizId/question/:questionid', QuizController.getAllQuizType);
+//GET USER LEADERBOARD
+route.get('/leaderboard', QuizController.getLeaderboard);
 
 module.exports = route;

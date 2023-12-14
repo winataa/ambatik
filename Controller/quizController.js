@@ -143,8 +143,29 @@ const submitQuiz = async(req, res) => {
     }
 }
 
+const getLeaderboard = async(req, res) => {
+    try{
+        const allUsers = await user.findAll({
+            attributes: ['name', 'point'],
+            order: [['point', 'DESC']],
+        });
+        res.status(200).json({
+            error: false,
+            message: 'Get user leaderboard',
+            data: allUsers,
+        })
+    }
+    catch(error){
+        res.status(500).json({
+            message: 'Server Error: Get User Leaderboard',
+            serverMessage: error.message
+        })
+    }
+}
+
 module.exports = {
     getAllQuizType,
     getQuestion,
-    submitQuiz
+    submitQuiz,
+    getLeaderboard
 }

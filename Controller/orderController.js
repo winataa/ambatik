@@ -5,6 +5,7 @@ const user = models.user;
 const product = models.product;
 const detailOrder = models.detail_order;
 const sequelize = models.sequelize;
+const cart = models.cart;
 
 const getAllOrder = async(req, res) => {
     try{
@@ -123,34 +124,33 @@ const checkout = async(req, res) => {
         if (eachQtys.length === eachPrices.length && eachPrices.length === productIds.length) {
             // Create detailOrder records for each set of values
             for (let i = 0; i < eachQtys.length; i++) {
-            await detailOrder.create({
-                each_qty: eachQtys[i],
-                each_price: eachPrices[i],
-                orderId: latestOrderId,
-                productId: productIds[i],
-            });
+                await detailOrder.create({
+                    each_qty: eachQtys[i],
+                    each_price: eachPrices[i],
+                    orderId: latestOrderId,
+                    productId: productIds[i],
+                });
             }
-        } else {
-            console.error('Array lengths do not match.');
-        }
-        
+            await cart.destroy({
+                where: {
+                    productId: productIds,
+                    userId: req.body.userId
+                },
+            });
 
-        // await detailOrder.create({
-        //     each_qty: req.body.eachqtys,
-        //     each_price: req.body.eachprices,
-        //     orderId: latestOrderId,
-        //     productId: req.body.productIds
-        // });
-        res.status(201).json({
-            error: false,
-            checkout: true,
-            message: 'Successfully checkout product',
-            //tester
-            // allProductId: productIds,
-            // allEachPrices: eachPrices,
-            // allEachQty: eachQtys,
-            // latest: latestOrderId
-        })
+            res.status(201).json({
+                error: false,
+                checkout: true,
+                message: 'Successfully checkout product & remove product from cart',
+            })
+        } 
+        else {
+            res.status(400).json({
+                error: false,
+                checkout: false,
+                message: 'Failed to checkout, array length must same',
+            })
+        }
     }
     catch(error){
         res.status(500).json({

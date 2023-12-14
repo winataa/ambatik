@@ -24,8 +24,9 @@ const orderRoute = require('./routes/orderRoute.js');
 const quizRoute = require('./routes/quizRoute.js');
 const batikRoute = require('./routes/batikRoute.js');
 
-//Import User Controller
+//Import Controller
 const UserController = require('./Controller/userController.js')
+const BatikController = require('./Controller/batikController.js')
 
 //User Route
 app.use('/users', userRoute);
@@ -45,6 +46,8 @@ app.use('/quiz', authenticateToken, quizRoute);
 
 //Batik Route
 app.use('/batik', authenticateToken, batikRoute);
+app.use('/batik/predict', authenticateToken, upload.single('file'), BatikController.predictBatik);
+
 
 //Error
 app.use((err, req, res, next) => {
