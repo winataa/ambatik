@@ -110,6 +110,7 @@ const predictBatik = async(req, res) => {
             // Handle the response from the local Flask API
             // res.status(200).send('receive ok');
             const batikName = response.data['types'];
+            const accuracy = response.data['accuracy'];
 
             const selectedBatik = await batik.findOne({
             attributes: [
@@ -127,8 +128,10 @@ const predictBatik = async(req, res) => {
             res.status(200).json({
                 error: false,
                 message: 'Get prediction batik',
+                batikName: batikName,
+                accuracy: accuracy,
                 data: selectedBatik,
-                batikName: batikName
+                // others: response.data
             })
         })
         .catch(error => {
