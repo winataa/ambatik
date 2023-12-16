@@ -49,13 +49,6 @@ const getSelectedArticle = async(req, res) => {
         var status = ""
         const hasStatusOne = selectedArticle.likes.some(like => like.status_like === "1");
 
-        // const val = selectedArticle.likes[0];
-        // let value = 'ever like'
-        // if(val == null){
-        //     value = 'never like';
-        // }
-
-
         if (hasStatusOne) {
             status = true;
         }

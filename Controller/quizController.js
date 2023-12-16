@@ -8,18 +8,18 @@ const user = models.user;
 
 const getAllQuizType = async(req, res) => {
     try{
-        const quizType =  await quiz.findAll({
-            attributes: [
-                'type',
-                [sequelize.literal('COALESCE(quiz_histories.done, 0)'), 'done'], // Use COALESCE to handle null values
-            ],
+
+        const quizType = await quiz.findAll({
+            attributes: ['id', 'type', [sequelize.literal('COALESCE(quiz_histories.done, 0)'), 'done']],
             include: [
                 {
                     model: quizHistory,
+                    attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
                     where: { userId: req.params.userid },
-                    required: false, // Use a left join
+                    required: false,
                 },
             ],
+            order: [[sequelize.literal('quiz_histories.point DESC')]], // Highest point
         });
         res.status(200).json({
             error: false,
@@ -70,16 +70,14 @@ const submitQuiz = async(req, res) => {
         const quizId = req.body.quizid;
         const questionIds = req.body.questionIds;
         const answerIds = req.body.answerIds;
-
         let result;
-        let checkAnswer
+        let checkAnswer;
         let accumulatePoint= 0;
         let totalCorrect = 0;
         let totalWrong = 0;
+        const quizScore = [];
         
-        const quizScore = []
         const selectedUser = await user.findByPk(userId);
-
         if(selectedUser){
             for(let i = 0; i < answerIds.length; i++){
                 result = await question.findOne({
@@ -111,14 +109,51 @@ const submitQuiz = async(req, res) => {
                 }
             }
 
+            const historyChecker = await quizHistory.findAll({
+                where: { 
+                    userId: userId,
+                    quizId: quizId 
+                },
+            })
+
+            const existHighestPointResult = await quizHistory.max('point', {
+            where: {
+                userId: userId,
+                quizId: quizId
+            }
+            });
+
+            // Extract the value from the result object
+            const existHighestPoint = existHighestPointResult;
+
+            const firstAttempt = historyChecker.length === 0;
+
+            if (firstAttempt) {
             await selectedUser.increment('point', { by: accumulatePoint });
-        
-            // quizScore.push({'totalCorrect': totalCorrect}, {'totalWrong': totalWrong}, {'accumulatePoint': accumulatePoint});
+            } else {
+            // Compare exist point & latest obtained point
+            const obtainedPoint = Math.max(0, accumulatePoint - existHighestPoint);
+            await selectedUser.increment('point', { by: obtainedPoint });
+            }
+                        
+
+            const currentDate = new Date().toISOString();
+            const insertQuizHistory = `
+            INSERT INTO quiz_histories (done, createdAt, updatedAt, userId, quizId, point)
+            VALUES ('1', '${currentDate}', '${currentDate}', ${userId}, ${quizId}, ${accumulatePoint});
+            `;
+
+            await sequelize.query(insertQuizHistory, { type: sequelize.QueryTypes.INSERT });
+
+
             quizScore.push({
                 'summary': {
+                    'firstAttempt': firstAttempt,
+                    'previousHighest': existHighestPoint,
                     'totalCorrect': totalCorrect,
                     'totalWrong': totalWrong,
-                    'accumulatePoint': accumulatePoint
+                    'accumulatePoint': accumulatePoint,
+                    // 'history': historyChecker,
                 }
             });
             res.status(200).json({
@@ -146,7 +181,7 @@ const submitQuiz = async(req, res) => {
 const getLeaderboard = async(req, res) => {
     try{
         const allUsers = await user.findAll({
-            attributes: ['name', 'point'],
+            attributes: ['name', 'point', 'url_profile'],
             order: [['point', 'DESC']],
         });
         res.status(200).json({

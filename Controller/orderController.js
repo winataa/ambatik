@@ -111,11 +111,6 @@ const checkout = async(req, res) => {
             userId: req.body.userId,
         });
         const latestOrderId = createdOrder.id;
-        // const latestOrderId = await order.findOne({
-        //     attributes: [
-        //         [sequelize.literal('(SELECT MAX(id) FROM orders)'), 'latestOrderId'],
-        //     ],
-        // });
         const eachQtys = req.body.eachqtys;
         const eachPrices = req.body.eachprices;
         const productIds = req.body.productIds;
@@ -131,12 +126,22 @@ const checkout = async(req, res) => {
                     productId: productIds[i],
                 });
             }
+
+            //Delete product from cart
             await cart.destroy({
                 where: {
                     productId: productIds,
                     userId: req.body.userId
                 },
             });
+
+            //Increase product sold
+            for (let i = 0; i < eachQtys.length; i++) {
+                await product.increment(
+                    {product_sold: +eachQtys[i]},
+                    {where: {id: productIds[i]}
+                });
+            }
 
             res.status(201).json({
                 error: false,
