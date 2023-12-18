@@ -9,18 +9,34 @@ const user = models.user;
 const getAllQuizType = async(req, res) => {
     try{
 
+        // const quizType = await quiz.findAll({
+        //     attributes: ['id', 'type', [sequelize.literal('COALESCE(quiz_histories.done, 0)'), 'done']],
+        //     include: [
+        //         {
+        //             model: quizHistory,
+        //             attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
+        //             where: { userId: req.params.userid },
+        //             required: false,
+        //         },
+        //     ],
+        //     // order: [[sequelize.literal('quiz_histories.point DESC')]], // Highest point
+        // });
+
         const quizType = await quiz.findAll({
-            attributes: ['id', 'type', [sequelize.literal('COALESCE(quiz_histories.done, 0)'), 'done']],
+            attributes: ['id', 'type', ],
             include: [
                 {
-                    model: quizHistory,
-                    attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
-                    where: { userId: req.params.userid },
-                    required: false,
+                model: quizHistory,
+                attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
+                where: { userId: req.params.userid },
+                required: false,
+                order: [['point', 'DESC']], // Order quizHistory records by point in descending order
+                limit: 1, // Retrieve only the top record (highest score) for each module
                 },
             ],
-            order: [[sequelize.literal('quiz_histories.point DESC')]], // Highest point
+            order: [['id', 'ASC']], // Order the main quiz records by id in ascending order
         });
+
         res.status(200).json({
             error: false,
             message: 'Get all quiz type',
