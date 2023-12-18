@@ -137,10 +137,11 @@ const submitQuiz = async(req, res) => {
             }
                         
 
-            const currentDate = new Date().toISOString();
+           // const currentDate = new Date().toISOString();
+            // const currentDate = new Date();
             const insertQuizHistory = `
             INSERT INTO quiz_histories (done, createdAt, updatedAt, userId, quizId, point)
-            VALUES ('1', '${currentDate}', '${currentDate}', ${userId}, ${quizId}, ${accumulatePoint});
+            VALUES ('1', NOW(), NOW(), ${userId}, ${quizId}, ${accumulatePoint});
             `;
 
             await sequelize.query(insertQuizHistory, { type: sequelize.QueryTypes.INSERT });
