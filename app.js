@@ -42,7 +42,7 @@ app.get('/article/details/:id/:userid?', skipAuthForPublicRoutes, ArticleControl
 app.get('/product/', skipAuthForPublicRoutes, ProductController.getAllProduct);
 app.get('/product/details/:productid', skipAuthForPublicRoutes, ProductController.getSelectedProduct);
 app.get('/quiz/leaderboard/', skipAuthForPublicRoutes, QuizController.getLeaderboard);
-app.get('/quiz/list/:userid', skipAuthForPublicRoutes, QuizController.getLeaderboard);
+app.get('/quiz/list/:userid?', skipAuthForPublicRoutes, QuizController.getAllQuizType);
 app.get('/batik/', skipAuthForPublicRoutes, BatikController.getAllBatik);
 app.get('/batik/:id', skipAuthForPublicRoutes, BatikController.getSelectedBatik);
 

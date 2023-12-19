@@ -21,21 +21,61 @@ const getAllQuizType = async(req, res) => {
         //     ],
         //     // order: [[sequelize.literal('quiz_histories.point DESC')]], // Highest point
         // });
+        // let quizType;
 
-        const quizType = await quiz.findAll({
-            attributes: ['id', 'type', ],
+        // if(!req.params.userid){
+        //     quizType = await quiz.findAll({
+        //         attributes: ['id', 'type', ],
+        //         include: [
+        //             {
+        //                 model: quizHistory,
+        //                 attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
+        //                 required: false,
+        //                 order: [['point', 'DESC']], // Order quizHistory records by point in descending order
+        //                 limit: 1, // Retrieve only the top record (highest score) for each module
+        //             },
+        //         ],
+        //         order: [['id', 'ASC']], // Order the main quiz records by id in ascending order
+        //     })
+        // }
+        // else{
+        //     quizType = await quiz.findAll({
+        //         attributes: ['id', 'type', ],
+        //         include: [
+        //             {
+        //             model: quizHistory,
+        //             attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
+        //             where: { userId: req.params.userid },
+        //             required: false,
+        //             order: [['point', 'DESC']], // Order quizHistory records by point in descending order
+        //             limit: 1, // Retrieve only the top record (highest score) for each module
+        //             },
+        //         ],
+        //         order: [['id', 'ASC']], // Order the main quiz records by id in ascending order
+        //     });
+        // }
+
+        let queryOptions = {
+            attributes: ['id', 'type'],
             include: [
                 {
-                model: quizHistory,
-                attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
-                where: { userId: req.params.userid },
-                required: false,
-                order: [['point', 'DESC']], // Order quizHistory records by point in descending order
-                limit: 1, // Retrieve only the top record (highest score) for each module
+                    model: quizHistory,
+                    attributes: ['id', 'done', 'createdAt', 'userId', 'quizId', 'point'],
+                    required: false,
+                    order: [['point', 'DESC']], // Order quizHistory records by point in descending order
+                    limit: 1, // Retrieve only the top record (highest score) for each module
                 },
             ],
             order: [['id', 'ASC']], // Order the main quiz records by id in ascending order
-        });
+        };
+
+        // Conditionally add where clause based on the presence of userid
+        if (req.params.userid) {
+            queryOptions.include[0].where = { userId: req.params.userid };
+        }
+
+        quizType = await quiz.findAll(queryOptions);
+        
 
         res.status(200).json({
             error: false,
