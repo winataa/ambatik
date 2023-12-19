@@ -25,26 +25,34 @@ const quizRoute = require('./routes/quizRoute.js');
 const batikRoute = require('./routes/batikRoute.js');
 
 //Import Controller
-const UserController = require('./Controller/userController.js')
-const BatikController = require('./Controller/batikController.js')
+const UserController = require('./Controller/userController.js');
+const ArticleController = require('./Controller/articleController.js');
+const BatikController = require('./Controller/batikController.js');
+const ProductController = require('./Controller/productController.js');
+const QuizController = require('./Controller/quizController.js');
 
-//User Route
+
+const skipAuthForPublicRoutes = (req, res, next) => {
+    next();
+};
+
+//PUBLIC ROUTE
+app.get('/article/', skipAuthForPublicRoutes, ArticleController.getAllArticle);
+app.get('/article/details/:id/:userid?', skipAuthForPublicRoutes, ArticleController.getSelectedArticle)
+app.get('/product/', skipAuthForPublicRoutes, ProductController.getAllProduct);
+app.get('/product/details/:productid', skipAuthForPublicRoutes, ProductController.getSelectedProduct);
+app.get('/quiz/leaderboard/', skipAuthForPublicRoutes, QuizController.getLeaderboard);
+app.get('/quiz/list/:userid', skipAuthForPublicRoutes, QuizController.getLeaderboard);
+app.get('/batik/', skipAuthForPublicRoutes, BatikController.getAllBatik);
+app.get('/batik/:id', skipAuthForPublicRoutes, BatikController.getSelectedBatik);
+
+
 app.use('/users', userRoute);
 app.use('/users/upload', authenticateToken, upload.single('file'), UserController.uploadFile);
-
-//Article Route
 app.use('/article', authenticateToken, articleRoute);
-
-//Product Route
 app.use('/product', authenticateToken, productRoute);
-
-//Order Route
 app.use('/order', authenticateToken, orderRoute);
-
-//Quiz Route
 app.use('/quiz', authenticateToken, quizRoute);
-
-//Batik Route
 app.use('/batik', authenticateToken, batikRoute);
 app.use('/batik/predict', authenticateToken, upload.single('file'), BatikController.predictBatik);
 

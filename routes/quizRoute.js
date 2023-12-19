@@ -14,6 +14,6 @@ route.get('/:quizId/question/:questionid', QuizController.getQuestion);
 route.post('/submit', QuizController.submitQuiz);
 
 //GET USER LEADERBOARD
-route.get('/leaderboard', QuizController.getLeaderboard);
+route.get('/leaderboard/', QuizController.getLeaderboard);
 
 module.exports = route;

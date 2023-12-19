@@ -23,39 +23,61 @@ const getAllArticle = async(req, res) => {
 
 const getSelectedArticle = async(req, res) => {
     try{
-    
-        const selectedArticle = await article.findOne({
-            attributes: ['id', 'title', 'url_banner', 'author', 'content', 'total_like'], 
-            include: [
-                {
-                model: like,
-                attributes: ['status_like'],
+        let selectedArticle;
+        if(!req.params.userid){
+            selectedArticle = await article.findOne({
+                attributes: ['id', 'title', 'url_banner', 'author', 'content', 'total_like'], 
                 include: [
                     {
-                    model: user,
-                    attributes: [],
-                    where: {
-                        id: req.params.userid, 
-                    },
+                    model: like,
+                    attributes: ['status_like'],
+                    include: [
+                        {
+                            model: user,
+                            attributes: [],
+                        },
+                    ],
                     },
                 ],
+                where: {
+                    id: req.params.id, 
                 },
-            ],
-            where: {
-                id: req.params.id, 
-            },
-        });
-
-        var status = ""
-        const hasStatusOne = selectedArticle.likes.some(like => like.status_like === "1");
-
-        if (hasStatusOne) {
-            status = true;
+            });
         }
         else{
-            status = false;
-        }
+            selectedArticle = await article.findOne({
+                attributes: ['id', 'title', 'url_banner', 'author', 'content', 'total_like'], 
+                include: [
+                    {
+                    model: like,
+                    attributes: ['status_like'],
+                    include: [
+                        {
+                            model: user,
+                            attributes: [],
+                            where: {
+                                id: req.params.userid, 
+                            },
+                        },
+                    ],
+                    },
+                ],
+                where: {
+                    id: req.params.id, 
+                },
+            });
 
+            var status = ""
+            const hasStatusOne = selectedArticle.likes.some(like => like.status_like === "1");
+
+            if (hasStatusOne) {
+                status = true;
+            }
+            else{
+                status = false;
+            }
+        }
+        
         res.status(200).json({
             error: false,
             liked: status,

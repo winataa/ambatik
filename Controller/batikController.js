@@ -102,8 +102,7 @@ const predictBatik = async(req, res) => {
         const fileURL = `https://storage.googleapis.com/${bucket.name}/batik_prediction_photo/${fileName}`;
         // const fileURL = `https://storage.cloud.google.com/user-photo-profile/${bucket.name}/user_photo/${fileName}`;
 
-        const flaskUrl = 'http://127.0.0.1:5000/process-image';
-        // const flaskUrl = 'http://34.87.94.205:3003/process-image';
+        const flaskUrl = `http://${process.env.FLASK_HOST}:5000/process-image`;
         
         axios.post(flaskUrl, { fileName: fileName })
         .then(async (response) => {
