@@ -14,17 +14,17 @@ module.exports = {
     */
       await queryInterface.bulkInsert('quizzes', [
       {
-        type: 'origin',
+        type: 'Quiz 1',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        type: 'pattern',
+        type: 'Quiz 2',
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
-        type: 'meaning',
+        type: 'Quiz 3',
         createdAt: new Date(),
         updatedAt: new Date(),
       },

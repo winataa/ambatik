@@ -147,11 +147,7 @@ module.exports = {
         total_like: 0,
         createdAt: new Date(),
         updatedAt: new Date()
-      },
-      {
-
       }
-
     ]);
   },
 
