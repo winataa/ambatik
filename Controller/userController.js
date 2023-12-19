@@ -9,7 +9,7 @@ const multer = require('multer');
 const date = new Date();
 const storage = new Storage({keyFilename: serviceAccount});
 
-const bucket = storage.bucket("user-photo-profile");
+const bucket = storage.bucket("ambatik_bucket");
 require('dotenv').config();
 
 const getAllUsers = async(req, res) => {
@@ -53,7 +53,8 @@ const createNewUser = async(req, res) => {
                 email: req.body.email,
                 username: req.body.username,
                 password: hashedPassword,
-                phone: req.body.phone
+                phone: req.body.phone,
+                url_profile: 'https://storage.googleapis.com/ambatik_bucket/user_photo/default-photo-profile.png'
             }); 
 
             res.status(201).json({
@@ -249,7 +250,7 @@ const uploadFile = async (req, res) => {
                 },
             });
 
-            const bucket = storage.bucket('user-photo-profile');
+            const bucket = storage.bucket('ambatik_bucket');
             const folderPath = 'user_photo';
             const fileRef = bucket.file(`${folderPath}/${fileName}`);
             await fileRef.save(fileData);

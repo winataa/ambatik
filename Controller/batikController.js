@@ -93,7 +93,7 @@ const predictBatik = async(req, res) => {
             },
         });
 
-        const bucket = storage.bucket('user-photo-profile');
+        const bucket = storage.bucket('ambatik_bucket');
         const folderPath = 'batik_prediction_photo';
         const fileRef = bucket.file(`${folderPath}/${fileName}`);
         await fileRef.save(fileData);
@@ -104,6 +104,7 @@ const predictBatik = async(req, res) => {
 
         const flaskUrl = `http://${process.env.FLASK_HOST}:5000/process-image`;
         
+
         axios.post(flaskUrl, { fileName: fileName })
         .then(async (response) => {
             // Handle the response from the local Flask API
