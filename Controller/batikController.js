@@ -129,7 +129,7 @@ const predictBatik = async(req, res) => {
                 error: false,
                 message: 'Get prediction batik',
                 batikName: batikName,
-                accuracy: rounded,
+                accuracy: parseFloat(accuracy),
                 data: selectedBatik,
                 // others: response.data
             })
