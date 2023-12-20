@@ -178,32 +178,32 @@ const predictBatik = async(req, res) => {
 }
 
 const personalization = async(req, res) => {
-    let truntum = [1, 1, 2, 0, 1]
-    let tambal = ['Tambal', 2, 1, 1, 0, 2];
-    let sogan = ['Sogan', 2, 1, 2, 0, 3];
-    let simbut = ['Simbut', 1, 2, 1, 0, 4];
-    let sekar_jagad = ['Sekar Jagad', 1, 1, 1, 0, 5];
-    let pring_sedapur = ['Pring Sedapur', 1, 2, 1, 0, 6];
-    let poleng = ['Poleng', 1, 2, 1, 0, 7];
-    let parang = ['Parang', 2, 1, 1, 0, 8];
-    let nitik = ['Nitik', 2, 1, 2, 0, 9];
-    let mega_mendung = ['Mega Mendung', 1, 2, 1, 0, 10];
-    let lasem = ['Lasem', 1, 2, 1, 0, 11];
-    let kawung = ['Kawung', 2, 1, 2, 0, 12];
-    let insang = ['Insang', 1, 2, 2, 0, 13];
-    let geblek_renteng = ['Geblek Renteng', 1, 2, 2, 0, 14];
-    let cendrawasih = ['Cendrawasih', 1, 2, 2, 0, 15];
+    // name,class 1,2,3, score, id, image name
+    let truntum = ['Truntum', 1, 1, 2, 0, 1, '1_truntum.jpg']
+    let tambal = ['Tambal', 2, 1, 1, 0, 2, '2_tambal.jpg'];
+    let sogan = ['Sogan', 2, 1, 2, 0, 3, '3_sogan.jpg'];
+    let simbut = ['Simbut', 1, 2, 1, 0, 4, '4_simbut.jpg'];
+    let sekar_jagad = ['Sekar Jagad', 1, 1, 1, 0, 5, '5_sekar_jagad.jpg'];
+    let pring_sedapur = ['Pring Sedapur', 1, 2, 1, 0, 6, '6_pring_sedapur.jpg'];
+    let poleng = ['Poleng', 1, 2, 1, 0, 7, '7_poleng.jpg'];
+    let parang = ['Parang', 2, 1, 1, 0, 8, '8_parang.jpg'];
+    let nitik = ['Nitik', 2, 1, 2, 0, 9, '9_nitik.jpg'];
+    let mega_mendung = ['Mega Mendung', 1, 2, 1, 0, 10, '10_mega_mendung.jpg'];
+    let lasem = ['Lasem', 1, 2, 1, 0, 11, '11_lasem.jpg'];
+    let kawung = ['Kawung', 2, 1, 2, 0, 12, '12_kawung.png'];
+    let insang = ['Insang', 1, 2, 2, 0, 13, '13_insang.jpg'];
+    let geblek_renteng = ['Geblek Renteng', 1, 2, 2, 0, 14, '14_geblek_renteng.jpg'];
+    let cendrawasih = ['Cendrawasih', 1, 2, 2, 0, 15, '	15_cendrawasih.jpg'];
 
-    let batikList = [tambal, sogan, simbut, sekar_jagad, pring_sedapur, poleng, parang, nitik, mega_mendung, lasem, kawung, insang, geblek_renteng, cendrawasih];
+    let batikList = [truntum,tambal, sogan, simbut, sekar_jagad, pring_sedapur, poleng, parang, nitik, mega_mendung, lasem, kawung, insang, geblek_renteng, cendrawasih];
 
-    const jawaban_user = [1, 1, 1];
-
+    const jawaban_user = req.body.userAnswers;
     for (let i = 0; i < batikList.length; i++) {
-    for (let j = 0; j < jawaban_user.length; j++) {
-        if (batikList[i][j + 1] === jawaban_user[j]) {
-        batikList[i][4] = batikList[i][4] + 1;
+        for (let j = 0; j < jawaban_user.length; j++) {
+            if (batikList[i][j + 1] === jawaban_user[j]) {
+                batikList[i][4] = batikList[i][4] + 1;
+            }
         }
-    }
     }
 
     // Sorting the batikList based on the value at index 4 in descending order
@@ -218,6 +218,7 @@ const personalization = async(req, res) => {
     let batikObject = {
         id: topThreeResults[i][5],
         name: topThreeResults[i][0],
+        url_image: 'https://storage.googleapis.com/ambatik_bucket/batik_photo/'+topThreeResults[i][6]
         // votes: topThreeResults[i][4]
     };
     resultJSON.push(batikObject);
