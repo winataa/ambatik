@@ -45,6 +45,7 @@ app.get('/quiz/leaderboard/', skipAuthForPublicRoutes, QuizController.getLeaderb
 app.get('/quiz/list/:userid?', skipAuthForPublicRoutes, QuizController.getAllQuizType);
 app.get('/batik/', skipAuthForPublicRoutes, BatikController.getAllBatik);
 app.get('/batik/:id', skipAuthForPublicRoutes, BatikController.getSelectedBatik);
+app.post('/batik/personalization', skipAuthForPublicRoutes, BatikController.personalization);
 
 
 app.use('/users', userRoute);
