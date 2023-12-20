@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      batik.belongsToMany(models.product, { through: models.batik_product })
+
     }
   }
   batik.init({

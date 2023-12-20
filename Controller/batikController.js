@@ -1,7 +1,11 @@
+const { Op } = require('sequelize');
 const models = require('../models/');
 const batik = models.batik;
+const product = models.product;
+const batikProduct = models.batik_product;
 const serviceAccount = require('../service_account/service_account.json');
 const { Storage } = require("@google-cloud/storage");
+const sequelize = models.sequelize;
 const date = new Date();
 const storage = new Storage({keyFilename: serviceAccount});
 const axios = require('axios');
@@ -125,12 +129,30 @@ const predictBatik = async(req, res) => {
                     name: `Batik ${batikName}`,
                 },
             });
+
+            const productRecommendation = await product.findAll({
+            attributes: [
+                'name',
+                'url_product',
+                'price',
+                'rating',
+                'product_sold',
+                'store_name'
+            ],
+            where: {
+                name: {
+                [Op.like]: '%'+batikName+'%',
+                }
+            }
+            });
+
             res.status(200).json({
                 error: false,
                 message: 'Get prediction batik',
                 batikName: batikName,
-                accuracy: parseFloat(accuracy),
+                accuracy: parseFloat(rounded),
                 data: selectedBatik,
+                products: productRecommendation
                 // others: response.data
             })
         })
