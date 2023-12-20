@@ -606,6 +606,17 @@ module.exports = {
         store_name: 'Batik Slim',
         createdAt: new Date(),
         updatedAt: new Date(),
+      },
+      {
+        name: 'Kain Batik Geblek Renteng',
+        url_product: 'https://storage.googleapis.com/ambatik_bucket/produk_photo/geblek_renteng_1.jpg',
+        price: 159000,
+        description: 'Batik cap dengan warna gradasi, batik asli dengan nuansa modern yang membuat penampilan anda kekinian dan tetap elegan. pakailah batik yang asli batik, karna anda berkualitas.',
+        rating: 5.0,
+        product_sold: 2,
+        store_name: 'Djoeragan Batik',
+        createdAt: new Date(),
+        updatedAt: new Date(),
       }
       // Add more product objects as needed
     ], {});

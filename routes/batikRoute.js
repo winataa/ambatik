@@ -12,5 +12,8 @@ route.get('/', BatikController.getAllBatik);
 //GET SELECTED ARTICLE
 route.get('/:id', BatikController.getSelectedBatik);
 
+//Batik Personalization
+route.post('/personalization', BatikController.personalization);
+
 
 module.exports = route;

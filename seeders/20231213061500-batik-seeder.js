@@ -157,7 +157,7 @@ module.exports = {
         name: 'Batik Cendrawasih',
         url_batik: 'https://storage.googleapis.com/ambatik_bucket/batik_photo/15_cendrawasih.jpg',
         origin: 'Papua',
-        meaning: 'Motif ini memiliki corak menyerupai daun talas dengan warna yang cerah. Berasal dari Suku Baduy di Banten, motif batik Simbut menyimpan filosofi tentang kedekatan manusia dengan alam sekitar. Ciri khas motif batik khas Banten ini adalah warnanya yang cenderung cerah, namun tetap tidak mencolok. Garis yang digunakan dalam motif batik simbut cenderung tebal dan berukuran besar.',
+        meaning: 'Motif Cendrawasih Menggambarkan kekayaan,keindahan dan keanggunan alam dan fauna Papua.',
         making_process: 'Seperti halnya pembuatan batik pada umumnya, pembuatan batik Cendrawasih melibatkan beberapa tahapan penting, seperti membuat pola, menggambar pola pada kain, mengaplikasikan malam pada bagian-bagian tertentu pada kain, pewarnaan, dan pembersihan. Setiap motif batik memiliki ciri khas dan teknik pembuatan yang berbeda-beda, tergantung pada daerah asal dan tradisi yang berkembang di masyarakat setempat. \n',
         usage_purpose: 'Cendrawasih dianggap sebagai burung surga dan masyarakat setempat memiliki kepercayaan bahwa burung tersebut menghubungkan kehidupan surga dan bumi. Tak heran jika fauna endemik tersebut menjadi simbol yang sakral bagi masyarakat Papua. Jika memakai batik motif Cendrawasih maka pemakainya, aura anggun, gagah dan menawan akan terpancar.',
         createdAt: new Date(),

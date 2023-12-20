@@ -118,6 +118,7 @@ const predictBatik = async(req, res) => {
             const rounded = accuracy.toFixed(2);
             const selectedBatik = await batik.findOne({
             attributes: [
+                'id',
                 'name',
                 'url_batik',
                 'origin',
@@ -132,6 +133,7 @@ const predictBatik = async(req, res) => {
 
             const productRecommendation = await product.findAll({
             attributes: [
+                'id',
                 'name',
                 'url_product',
                 'price',
@@ -175,8 +177,64 @@ const predictBatik = async(req, res) => {
     }
 }
 
+const personalization = async(req, res) => {
+    let truntum = [1, 1, 2, 0, 1]
+    let tambal = ['Tambal', 2, 1, 1, 0, 2];
+    let sogan = ['Sogan', 2, 1, 2, 0, 3];
+    let simbut = ['Simbut', 1, 2, 1, 0, 4];
+    let sekar_jagad = ['Sekar Jagad', 1, 1, 1, 0, 5];
+    let pring_sedapur = ['Pring Sedapur', 1, 2, 1, 0, 6];
+    let poleng = ['Poleng', 1, 2, 1, 0, 7];
+    let parang = ['Parang', 2, 1, 1, 0, 8];
+    let nitik = ['Nitik', 2, 1, 2, 0, 9];
+    let mega_mendung = ['Mega Mendung', 1, 2, 1, 0, 10];
+    let lasem = ['Lasem', 1, 2, 1, 0, 11];
+    let kawung = ['Kawung', 2, 1, 2, 0, 12];
+    let insang = ['Insang', 1, 2, 2, 0, 13];
+    let geblek_renteng = ['Geblek Renteng', 1, 2, 2, 0, 14];
+    let cendrawasih = ['Cendrawasih', 1, 2, 2, 0, 15];
+
+    let batikList = [tambal, sogan, simbut, sekar_jagad, pring_sedapur, poleng, parang, nitik, mega_mendung, lasem, kawung, insang, geblek_renteng, cendrawasih];
+
+    const jawaban_user = [1, 1, 1];
+
+    for (let i = 0; i < batikList.length; i++) {
+    for (let j = 0; j < jawaban_user.length; j++) {
+        if (batikList[i][j + 1] === jawaban_user[j]) {
+        batikList[i][4] = batikList[i][4] + 1;
+        }
+    }
+    }
+
+    // Sorting the batikList based on the value at index 4 in descending order
+    batikList.sort((a, b) => b[4] - a[4]);
+
+    // Getting the top three results
+    let topThreeResults = batikList.slice(0, 3);
+
+    // Creating a JSON object for the top three results
+    let resultJSON = [];
+    for (let i = 0; i < topThreeResults.length; i++) {
+    let batikObject = {
+        id: topThreeResults[i][5],
+        name: topThreeResults[i][0],
+        // votes: topThreeResults[i][4]
+    };
+    resultJSON.push(batikObject);
+    }
+
+    res.status(200).json({
+        error: false,
+        message: 'Get selected batik',
+        data: resultJSON
+    })
+
+
+
+}
 module.exports = {
     getAllBatik,
     getSelectedBatik,
-    predictBatik
+    predictBatik,
+    personalization
 }
