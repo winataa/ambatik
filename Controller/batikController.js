@@ -111,7 +111,7 @@ const predictBatik = async(req, res) => {
             // res.status(200).send('receive ok');
             const batikName = response.data['types'];
             const accuracy = response.data['accuracy'];
-
+            const rounded = accuracy.toFixed(2);
             const selectedBatik = await batik.findOne({
             attributes: [
                 'name',
@@ -129,7 +129,7 @@ const predictBatik = async(req, res) => {
                 error: false,
                 message: 'Get prediction batik',
                 batikName: batikName,
-                accuracy: accuracy,
+                accuracy: rounded,
                 data: selectedBatik,
                 // others: response.data
             })

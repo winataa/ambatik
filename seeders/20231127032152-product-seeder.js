@@ -188,7 +188,18 @@ module.exports = {
         store_name: 'omah_batik_solo ',
         createdAt: new Date(),
         updatedAt: new Date(),
-      }
+      },
+      {
+        name: 'Blouse Batik Kawung',
+        url_product: 'https://storage.googleapis.com/user-photo-profile/produk_photo/produk16.png',
+        description: '- Blouse detail batik print klasik dengan nuansa cerah \n- Warna biru \n- Kerah sabrina \n- Regular fit \n- Resleting belakang \n- Material katun tidak transparan dan ringan \n- Tinggi model 174cm, lingkar dada 84cm, mengenakan ukuran S',
+        price: 149000,
+        rating: 5.0,
+        product_sold: 4,
+        store_name: 'Adikusuma',
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      },
       // Add more product objects as needed
     ], {});
 
