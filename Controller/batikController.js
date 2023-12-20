@@ -47,11 +47,32 @@ const getSelectedBatik = async(req, res) => {
                 id: req.params.id,
             },
         });
-        
+
+        const batikName = selectedBatik.name;
+        const getBatikName = batikName.replace('Batik ', '');
+
+        const productRecommendation = await product.findAll({
+            attributes: [
+                'id',
+                'name',
+                'url_product',
+                'price',
+                'rating',
+                'product_sold',
+                'store_name'
+            ],
+            where: {
+                name: {
+                [Op.like]: '%'+getBatikName+'%',
+                }
+            }
+        });
+
         res.status(200).json({
             error: false,
             message: 'Get selected batik',
-            data: selectedBatik
+            data: selectedBatik,
+            products: productRecommendation
         })
     }
     catch(error){
